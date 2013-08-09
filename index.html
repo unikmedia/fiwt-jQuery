@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<!--[if IE 8]> 				 <html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+	<meta charset="utf-8" />
+  	<meta name="viewport" content="width=device-width" />
+  	<title>Twitter feed plugin</title>
+</head>
+<body>
+	
+	<style type="text/css" media="screen">
+		ul li{
+			display: none;
+		}
+	</style>
+	<ul id="tweets"></ul>
+	
+	
+	<script id="twTemplate" type="text/x-handlebars-template">
+		{{#each tweets}}
+			<li>
+				<a href="http://twitter.com/{{user.screen_name}}" target="_blank"><img src="{{user.profile_image_url}}" alt="{{user.name}}" /></a>
+				<article>
+					{{user.name}} - {{tweet text}}
+				</article>
+				<div>
+					{{timeAgo created_at}}
+				</div>
+			</li>
+		{{/each}}
+	</script>
+	
+	<script src="js/jquery.js"></script>
+	<script src="js/handlebars.js"></script>
+	<script src="js/jquery.timeago.js"></script>
+	<script src="js/twitterFeed.js"></script>
+	<script>
+		$(document).ready(function(){
+			$('#tweets').fillItWithTweets({
+				template: '#twTemplate',
+				username: 'unik_media', 
+				container: '#tweets',
+				count: 6,
+				debug: true,
+				eachAppended: false,
+				messageLoading: 'Chargement des tweets... (message par défaut)',
+				beforeRender: function(){
+					console.log('before');
+				},
+				afterRender: function(){
+				// pour faire apparaitre les tweets apres le load des images
+					$('#tweets').children().find('img').on({
+						'load': function(){
+							$('#tweets').children().each(function(){
+								$(this).fadeIn(700);
+							});	
+						}
+					});
+					
+				}
+			});
+		});
+	</script>
+</body>
+</html>
